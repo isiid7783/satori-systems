@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Satori System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+<h1>Satori System</h1>
+
+<div class="circle">
+<div class="center">
+<p id="stateLabel">Inner Transformation</p>
+</div>
+</div>
+
+<div class="question">
+<p id="questionText">
+「今の自分を一言で表す言葉を入力せよ」
+</p>
+<input type="text" id="answerInput" placeholder="答えを入力">
+<button id="submitBtn">次へ進む</button>
+<p id="errorMsg"></p>
+</div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
