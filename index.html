@@ -1,33 +1,39 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Satori System</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
+<div class="app-container">
 
-<div class="app">
+<header class="app-header">
 <h1>Satori System</h1>
+<span class="status-dot"></span>
+</header>
 
-<div class="circle">
-<div class="center">
-<p id="stateLabel">Inner Transformation</p>
+<section class="dashboard-card glass">
+<h2>Risk / Loss Monitor</h2>
+
+<canvas id="riskChart"></canvas>
+
+<div class="metrics">
+<div class="metric">
+<span class="label">RISK</span>
+<span class="value high">72%</span>
 </div>
+<div class="metric">
+<span class="label">LOSS</span>
+<span class="value low">12%</span>
+</div>
+</div>
+</section>
+
 </div>
 
-<div class="question">
-<p id="questionText">
-「今の自分を一言で表す言葉を入力せよ」
-</p>
-<input type="text" id="answerInput" placeholder="答えを入力">
-<button id="submitBtn">次へ進む</button>
-<p id="errorMsg"></p>
-</div>
-</div>
-
-<script type="module" src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="ui.js"></script>
 </body>
 </html>
+
