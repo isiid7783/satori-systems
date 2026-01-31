@@ -31,14 +31,6 @@
 </div>
 </main>
 
-<script>
-const dantianLocked = localStorage.getItem("lockedByDantian");
-const dantianUnlockAt = localStorage.getItem("dantianUnlockAt");
-
-if (dantianLocked && dantianUnlockAt && Date.now() < dantianUnlockAt) {
-window.location.href = "locked.html";
-}
-</script>
 
 <script>
 window.addEventListener("load", () => {
@@ -72,6 +64,7 @@ window.location.href = "locked.html";
 </script>
 </body>
 </html>
+
 
 
 
