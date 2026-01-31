@@ -3,51 +3,104 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>OK</title>
 <style>
-html, body {
-margin: 0;
-padding: 0;
-height: 100%;
-background: black;
-color: white;
-display: flex;
-align-items: center;
-justify-content: center;
-font-family: monospace;
+html,body{
+margin:0;
+padding:0;
+width:100%;
+height:100%;
+background:black;
+overflow:hidden;
+}
+#btn{
+position:fixed;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-family:monospace;
+z-index:10;
 }
 </style>
 </head>
-
 <body>
+
 <div id="btn">tap to begin</div>
 
+<script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
 <script>
 const btn = document.getElementById("btn");
 
+let scene,camera,renderer,mesh;
+let lastAccel=null;
+let instability=0;
+
 btn.onclick = async () => {
-// iOS Safari 用の権限取得（クリック直結）
-if (
-typeof DeviceMotionEvent !== "undefined" &&
-typeof DeviceMotionEvent.requestPermission === "function"
-) {
-const res = await DeviceMotionEvent.requestPermission();
-if (res !== "granted") {
-btn.textContent = "permission denied";
-return;
-}
+if (typeof DeviceMotionEvent !== "undefined" &&
+typeof DeviceMotionEvent.requestPermission === "function") {
+const p = await DeviceMotionEvent.requestPermission();
+if (p !== "granted") return;
 }
 
-btn.textContent = "running";
-
-// センサーが実際に動いていることを可視化
-window.addEventListener("devicemotion", e => {
-const a = e.accelerationIncludingGravity;
-if (!a) return;
-btn.textContent =
-(Math.abs(a.x) + Math.abs(a.y) + Math.abs(a.z)).toFixed(2);
-});
+btn.remove();
+init();
+window.addEventListener("devicemotion", onMotion);
+animate();
 };
+
+function init(){
+scene = new THREE.Scene();
+
+camera = new THREE.PerspectiveCamera(
+60, innerWidth/innerHeight, 0.1, 100
+);
+camera.position.z = 3;
+
+renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(devicePixelRatio);
+document.body.appendChild(renderer.domElement);
+
+const geo = new THREE.IcosahedronGeometry(1,3);
+const mat = new THREE.MeshStandardMaterial({
+color:0xffffff,
+roughness:0.4,
+metalness:0.1
+});
+mesh = new THREE.Mesh(geo,mat);
+scene.add(mesh);
+
+const light = new THREE.DirectionalLight(0xffffff,1);
+light.position.set(2,2,2);
+scene.add(light);
+
+addEventListener("resize",()=>{
+camera.aspect = innerWidth/innerHeight;
+camera.updateProjectionMatrix();
+renderer.setSize(innerWidth,innerHeight);
+});
+}
+
+function onMotion(e){
+const a = e.accelerationIncludingGravity;
+if(!a) return;
+const cur = Math.abs(a.x)+Math.abs(a.y)+Math.abs(a.z);
+if(lastAccel!==null){
+instability = instability*0.9 + Math.abs(cur-lastAccel)*0.05;
+}
+lastAccel = cur;
+}
+
+function animate(){
+requestAnimationFrame(animate);
+
+mesh.rotation.x += 0.002 + instability*0.01;
+mesh.rotation.y += 0.003 + instability*0.01;
+mesh.scale.setScalar(1 + instability*0.2);
+
+renderer.render(scene,camera);
+}
 </script>
 </body>
 </html>
