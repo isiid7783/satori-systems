@@ -30,36 +30,28 @@ z-index:10;
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
 <script>
-/* ===== 起動 ===== */
-const overlay = document.getElementById("overlay");
+const overlay=document.getElementById("overlay");
 
-/* ===== ランダム人格 ===== */
-const seed = Math.random();
-let profile = {
-calmThreshold: 0.7 + seed*0.25,
-noiseDecay: 0.97 + seed*0.02,
-audioBase: 40 + seed*80
-};
-
-/* ===== Three.js ===== */
 let scene,camera,renderer,mesh;
-
-/* ===== Motion ===== */
-let motionHistory=[];
-let gyroHistory=[];
+let motion=[],gyro=[];
 let lastInteraction=performance.now();
-let calmIndex=0;
-let calmDuration=0;
+let calmIndex=0,calmTime=0;
 const HISTORY=60;
 
-/* ===== Audio ===== */
+const seed=Math.random();
+let phase={
+calmThreshold:0.7+seed*0.2,
+noiseDecay:0.97+seed*0.02,
+audioBase:40+seed*80
+};
+
 let audioCtx,osc,gain;
 
-overlay.onclick = async ()=>{
+overlay.onclick=async()=>{
 if(typeof DeviceMotionEvent!=="undefined" &&
 typeof DeviceMotionEvent.requestPermission==="function"){
-const p = await DeviceMotionEvent.requestPermission();
-if(p!=="granted") return;
+const p=await DeviceMotionEvent.requestPermission();
+if(p!=="granted")return;
 }
 overlay.remove();
 init3D();
@@ -68,7 +60,10 @@ window.addEventListener("devicemotion",onMotion);
 animate();
 };
 
-/* ===== 初期化 ===== */
+["touchstart","touchmove","click"].forEach(e=>{
+addEventListener(e,()=>lastInteraction=performance.now());
+});
+
 function init3D(){
 scene=new THREE.Scene();
 camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,100);
@@ -102,28 +97,22 @@ audioCtx=new (window.AudioContext||window.webkitAudioContext)();
 osc=audioCtx.createOscillator();
 gain=audioCtx.createGain();
 osc.type="sine";
-osc.frequency.value=profile.audioBase;
+osc.frequency.value=phase.audioBase;
 gain.gain.value=0;
 osc.connect(gain);
 gain.connect(audioCtx.destination);
 osc.start();
 }
 
-/* ===== 観測 ===== */
-["touchstart","touchmove","click"].forEach(e=>{
-addEventListener(e,()=>lastInteraction=performance.now());
-});
-
 function onMotion(e){
 const a=e.accelerationIncludingGravity;
 const r=e.rotationRate;
-if(!a||!r) return;
+if(!a||!r)return;
 
-motionHistory.push(Math.sqrt(a.x*a.x+a.y*a.y+a.z*a.z));
-gyroHistory.push(Math.sqrt(r.alpha*r.alpha+r.beta*r.beta+r.gamma*r.gamma));
-
-if(motionHistory.length>HISTORY) motionHistory.shift();
-if(gyroHistory.length>HISTORY) gyroHistory.shift();
+motion.push(Math.sqrt(a.x*a.x+a.y*a.y+a.z*a.z));
+gyro.push(Math.sqrt(r.alpha*r.alpha+r.beta*r.beta+r.gamma*r.gamma));
+if(motion.length>HISTORY)motion.shift();
+if(gyro.length>HISTORY)gyro.shift();
 }
 
 function variance(arr){
@@ -131,35 +120,33 @@ const m=arr.reduce((a,b)=>a+b,0)/arr.length;
 return arr.reduce((a,b)=>a+(b-m)*(b-m),0)/arr.length;
 }
 
-/* ===== ループ ===== */
-let lastTime=performance.now();
+let last=performance.now();
 function animate(){
 requestAnimationFrame(animate);
 const now=performance.now();
-const dt=now-lastTime;
-lastTime=now;
+const dt=now-last;
+last=now;
 
-if(motionHistory.length>=HISTORY){
-const mv=variance(motionHistory);
-const gv=variance(gyroHistory);
+if(motion.length>=HISTORY){
+const mv=variance(motion);
+const gv=variance(gyro);
 const inactivity=Math.min((now-lastInteraction)/2000,1);
-
 calmIndex=
 0.4*Math.max(0,1-mv*5)+
 0.4*Math.max(0,1-gv*5)+
 0.2*inactivity;
 
-if(calmIndex>profile.calmThreshold){
-calmDuration+=dt;
+if(calmIndex>phase.calmThreshold){
+calmTime+=dt;
 }else{
-calmDuration=Math.max(0,calmDuration-dt*0.5);
+calmTime=Math.max(0,calmTime-dt*0.5);
 }
 
-if(calmDuration>3000){
-calmDuration=0;
-profile.calmThreshold=0.6+Math.random()*0.4;
-profile.noiseDecay=0.97+Math.random()*0.02;
-profile.audioBase=30+Math.random()*120;
+if(calmTime>3000){
+calmTime=0;
+phase.calmThreshold=0.6+Math.random()*0.4;
+phase.noiseDecay=0.97+Math.random()*0.02;
+phase.audioBase=30+Math.random()*120;
 }
 }
 
@@ -169,14 +156,12 @@ mesh.rotation.x+=0.002+instability*0.01;
 mesh.rotation.y+=0.003+instability*0.01;
 mesh.scale.setScalar(1+instability*0.2);
 mesh.material.roughness=
-mesh.material.roughness*profile.noiseDecay+instability*0.05;
+mesh.material.roughness*phase.noiseDecay+instability*0.05;
 
 if(gain){
-const target=calmIndex>0.85?0:Math.min(instability*0.15,0.15);
-gain.gain.linearRampToValueAtTime(
-target,audioCtx.currentTime+0.1
-);
-osc.frequency.value=profile.audioBase+instability*60;
+const t=calmIndex>0.85?0:Math.min(instability*0.15,0.15);
+gain.gain.linearRampToValueAtTime(t,audioCtx.currentTime+0.1);
+osc.frequency.value=phase.audioBase+instability*60;
 }
 
 renderer.render(scene,camera);
