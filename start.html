@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATORI SYSTEM / START</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="phase phase-1 fade-out">
+<main class="screen">
+<div class="center">
+<h1 class="title">SYSTEM ONLINE</h1>
+<p class="subtitle">INITIALIZINGÅc</p>
+<button class="primary" id="nextButton">NEXT</button>
+</div>
+</main>
+
+<script>
+window.addEventListener("load", () => {
+document.body.classList.remove("fade-out");
+});
+
+document.getElementById("nextButton").addEventListener("click", () => {
+document.body.classList.add("fade-out");
+setTimeout(() => {
+window.location.href = "phase2.html";
+}, 600);
+});
+</script>
+</body>
+</html>
+

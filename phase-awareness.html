@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATORI SYSTEM / AWARENESS</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="phase phase-awareness fade-out">
+<main class="screen">
+<div class="center">
+<h1 class="title">BODY AWARENESS CHECK</h1>
+
+<p class="subtitle">
+スポーツ歴はなく、<br>
+日常で身体の末端（指先など）まで<br>
+意識する訓練は行っていない
+</p>
+
+<button class="primary" id="noTraining">
+はい
+</button>
+
+<button class="primary" id="hasTraining">
+いいえ
+</button>
+</div>
+</main>
+
+<script>
+const locked = localStorage.getItem("lockedByAwareness");
+const unlockAt = localStorage.getItem("unlockAt");
+
+if (locked && unlockAt && Date.now() < unlockAt) {
+window.location.href = "locked.html";
+}
+</script>
+
+<script>
+window.addEventListener("load", () => {
+document.body.classList.remove("fade-out");
+});
+
+// 「はい」を選んだ場合 → 3年間ロック
+document.getElementById("noTraining").addEventListener("click", () => {
+const now = Date.now();
+
+// 3年（ミリ秒）
+const threeYears =
+3 * 365 * 24 * 60 * 60 * 1000;
+
+localStorage.setItem("lockedByAwareness", "true");
+localStorage.setItem("lockStartedAt", now);
+localStorage.setItem("unlockAt", now + threeYears);
+
+document.body.classList.add("fade-out");
+setTimeout(() => {
+window.location.href = "locked.html";
+}, 600);
+});
+
+// 「いいえ」を選んだ場合 → 次フェーズへ
+document.getElementById("hasTraining").addEventListener("click", () => {
+document.body.classList.add("fade-out");
+setTimeout(() => {
+window.location.href = "phase-next.html";
+}, 600);
+});
+</script>
+</body>
+</html>

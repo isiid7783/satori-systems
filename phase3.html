@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATORI SYSTEM / DANTIAN CHECK</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="phase phase-dantian fade-out">
+<main class="screen">
+<div class="center">
+
+<h1 class="title">DANTIAN AWARENESS</h1>
+
+<p class="subtitle">
+下丹田および中丹田のポイントに、<br>
+意識を入力し続ける感覚が、<br>
+すでに3年程度、<br>
+無意識的に持続している。
+</p>
+
+<button class="primary" id="yesBtn">
+はい
+</button>
+
+<button class="primary" id="noBtn">
+いいえ
+</button>
+
+</div>
+</main>
+
+<script>
+const dantianLocked = localStorage.getItem("lockedByDantian");
+const dantianUnlockAt = localStorage.getItem("dantianUnlockAt");
+
+if (dantianLocked && dantianUnlockAt && Date.now() < dantianUnlockAt) {
+window.location.href = "locked.html";
+}
+</script>
+
+<script>
+window.addEventListener("load", () => {
+document.body.classList.remove("fade-out");
+});
+
+// 「はい」→ 次フェーズへ
+document.getElementById("yesBtn").addEventListener("click", () => {
+document.body.classList.add("fade-out");
+setTimeout(() => {
+window.location.href = "phase-next.html";
+}, 600);
+});
+
+// 「いいえ」→ 3年間ロック
+document.getElementById("noBtn").addEventListener("click", () => {
+const now = Date.now();
+
+const threeYears =
+3 * 365 * 24 * 60 * 60 * 1000;
+
+localStorage.setItem("lockedByDantian", "true");
+localStorage.setItem("dantianLockStartedAt", now);
+localStorage.setItem("dantianUnlockAt", now + threeYears);
+
+document.body.classList.add("fade-out");
+setTimeout(() => {
+window.location.href = "locked.html";
+}, 600);
+});
+</script>
+</body>
+</html>
+
+

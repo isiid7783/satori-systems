@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATORI SYSTEM / LOCKED</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="phase no-fade">
+<main class="screen">
+<div class="center">
+<h1 class="title">ACCESS SUSPENDED</h1>
+
+<p class="subtitle">
+現在の身体意識では、<br>
+次の段階を知覚できない。
+</p>
+
+<p class="subtitle" id="remaining"></p>
+</div>
+</main>
+
+<script>
+const locked = localStorage.getItem("lockedByAwareness");
+const unlockAt = localStorage.getItem("unlockAt");
+
+if (locked && unlockAt && Date.now() < unlockAt) {
+window.location.href = "locked.html";
+}
+</script>
+
+<script>
+const unlockAt = localStorage.getItem("unlockAt");
+const remaining = document.getElementById("remaining");
+
+if (!unlockAt) {
+remaining.textContent = "状態が確認できません。";
+} else {
+const diff = unlockAt - Date.now();
+
+if (diff <= 0) {
+remaining.textContent =
+"次の段階への再試行が可能です。";
+} else {
+const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+remaining.textContent =
+`再試行可能まで：約 ${days} 日`;
+}
+}
+</script>
+</body>
+</html>
