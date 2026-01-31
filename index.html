@@ -1,46 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<title>Satori System</title>
-<link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATORI SYSTEM</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<body>
-<div class="app-container">
-
-<header class="app-header">
-<h1>Satori System</h1>
-<span class="status-dot"></span>
-</header>
-
-<section class="dashboard-card glass">
-<h2>Risk / Loss Monitor</h2>
-
-<canvas id="riskChart"></canvas>
-
-<div class="metrics">
-<div class="metric">
-<span class="label">RISK</span>
-<span class="value high">72%</span>
+<body class="home">
+<main class="screen">
+<div class="center">
+<div class="cube"></div>
+<h1 class="title">SATORI SYSTEM</h1>
+<button class="primary" id="startButton">START</button>
 </div>
-<div class="metric">
-<span class="label">LOSS</span>
-<span class="value low">12%</span>
-</div>
-</div>
-</section>
+</main>
 
-</div>
-
-<img src="img/img1.png">
-<img src="img/img2.png">
-<img src="img/img3.png">
-<img src="img/img4.png">
-<img src="img/img5.png">
- 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="ui.js"></script>
+<script>
+document.getElementById("startButton").addEventListener("click", () => {
+document.body.classList.add("fade-out");
+setTimeout(() => {
+window.location.href = "start.html";
+}, 600);
+});
+</script>
 </body>
 </html>
+
 
 
