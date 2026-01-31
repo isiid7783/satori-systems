@@ -1,204 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Abstract Space</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>OK</title>
 <style>
 html, body {
 margin: 0;
 padding: 0;
+height: 100%;
 background: black;
-overflow: hidden;
-touch-action: none;
-}
-
-#overlay {
-position: fixed;
-inset: 0;
+color: white;
 display: flex;
 align-items: center;
 justify-content: center;
-color: rgba(255,255,255,0.5);
 font-family: monospace;
-font-size: 14px;
-background: black;
-z-index: 10;
 }
 </style>
 </head>
 
 <body>
-<div id="overlay">tap to begin</div>
-
-<!-- Three.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
+<div id="btn">tap to begin</div>
 
 <script>
-/* ===============================
-グローバル変数
-=============================== */
-let scene, camera, renderer, mesh;
-let audioCtx, osc, gain;
+const btn = document.getElementById("btn");
 
-let lastAccel = null;
-let stability = 0;
-const smoothing = 0.9;
-let started = false;
-
-/* ===============================
-Three.js 初期化
-=============================== */
-function initScene() {
-scene = new THREE.Scene();
-
-camera = new THREE.PerspectiveCamera(
-60,
-window.innerWidth / window.innerHeight,
-0.1,
-100
-);
-camera.position.z = 3;
-
-renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
-document.body.appendChild(renderer.domElement);
-
-const geometry = new THREE.IcosahedronGeometry(1, 3);
-const material = new THREE.MeshStandardMaterial({
-color: 0xffffff,
-roughness: 0.5,
-metalness: 0.1
-});
-
-mesh = new THREE.Mesh(geometry, material);
-scene.add(mesh);
-
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(2, 2, 2);
-scene.add(light);
-
-window.addEventListener("resize", () => {
-camera.aspect = window.innerWidth / window.innerHeight;
-camera.updateProjectionMatrix();
-renderer.setSize(window.innerWidth, window.innerHeight);
-});
-}
-
-/* ===============================
-Audio 初期化（iOS対応）
-=============================== */
-function initAudio() {
-audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-osc = audioCtx.createOscillator();
-osc.type = "sine";
-osc.frequency.value = 60;
-
-gain = audioCtx.createGain();
-gain.gain.value = 0;
-
-osc.connect(gain);
-gain.connect(audioCtx.destination);
-osc.start();
-}
-
-/* ===============================
-DeviceMotion 許可
-=============================== */
-function requestMotionPermission() {
+btn.onclick = async () => {
+// iOS Safari 用の権限取得（クリック直結）
 if (
 typeof DeviceMotionEvent !== "undefined" &&
 typeof DeviceMotionEvent.requestPermission === "function"
 ) {
-DeviceMotionEvent.requestPermission().then(state => {
-if (state === "granted") start();
-else alert("Motion permission denied");
-});
-} else {
-start();
+const res = await DeviceMotionEvent.requestPermission();
+if (res !== "granted") {
+btn.textContent = "permission denied";
+return;
 }
 }
 
-/* ===============================
-開始処理（1回のみ）
-=============================== */
-function start() {
-if (started) return;
-started = true;
+btn.textContent = "running";
 
-document.getElementById("overlay").remove();
-
-initAudio();
-window.addEventListener("devicemotion", onMotion);
-}
-
-/* ===============================
-センサー処理
-=============================== */
-function onMotion(e) {
+// センサーが実際に動いていることを可視化
+window.addEventListener("devicemotion", e => {
 const a = e.accelerationIncludingGravity;
 if (!a) return;
-
-const cur = {
-x: a.x || 0,
-y: a.y || 0,
-z: a.z || 0
+btn.textContent =
+(Math.abs(a.x) + Math.abs(a.y) + Math.abs(a.z)).toFixed(2);
+});
 };
-
-if (lastAccel) {
-const dx = cur.x - lastAccel.x;
-const dy = cur.y - lastAccel.y;
-const dz = cur.z - lastAccel.z;
-const delta = Math.sqrt(dx*dx + dy*dy + dz*dz);
-
-stability = smoothing * stability + (1 - smoothing) * delta;
-}
-
-lastAccel = cur;
-}
-
-/* ===============================
-アニメーションループ
-=============================== */
-function animate() {
-requestAnimationFrame(animate);
-
-const instability = Math.min(stability * 5, 1);
-
-mesh.rotation.x += 0.002 + instability * 0.01;
-mesh.rotation.y += 0.003 + instability * 0.01;
-
-mesh.scale.setScalar(1 + instability * 0.2);
-mesh.material.roughness = 0.3 + instability * 0.4;
-
-if (gain) {
-const target = instability < 0.1 ? 0 : instability * 0.15;
-gain.gain.linearRampToValueAtTime(
-target,
-audioCtx.currentTime + 0.1
-);
-osc.frequency.value = 50 + instability * 40;
-}
-
-renderer.render(scene, camera);
-}
-
-/* ===============================
-初期実行
-=============================== */
-initScene();
-animate();
-
-document.body.addEventListener(
-"click",
-requestMotionPermission,
-{ once: true }
-);
 </script>
-
 </body>
 </html>
