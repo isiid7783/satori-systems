@@ -71,7 +71,7 @@ function render() {
 
 const I18N = {
   ja: {
-    title: "Relation Engine",
+    title: "Plato System Relation Engine",
     nodePlaceholder: "概念（1語）",
     addNode: "ノード追加",
     addEdge: "関係追加",
@@ -82,7 +82,7 @@ const I18N = {
     negation: "否定"
   },
   en: {
-    title: "Relation Engine",
+    title: "Plato System Relation Engine",
     nodePlaceholder: "Concept (one word)",
     addNode: "Add Node",
     addEdge: "Add Relation",
@@ -93,7 +93,7 @@ const I18N = {
     negation: "Negation"
   },
   es: {
-    title: "Motor de Relaciones",
+    title: "Plato System Motor de Relaciones",
     nodePlaceholder: "Concepto (una palabra)",
     addNode: "Agregar nodo",
     addEdge: "Agregar relación",
@@ -104,7 +104,7 @@ const I18N = {
     negation: "Negación"
   },
   "zh-cn": {
-    title: "关系引擎",
+    title: "Plato System 关系引擎",
     nodePlaceholder: "概念（一个词）",
     addNode: "添加节点",
     addEdge: "添加关系",
@@ -115,7 +115,7 @@ const I18N = {
     negation: "否定"
   },
   "zh-tw": {
-    title: "關係引擎",
+    title: "Plato System 關係引擎",
     nodePlaceholder: "概念（單一詞）",
     addNode: "新增節點",
     addEdge: "新增關係",
@@ -126,7 +126,7 @@ const I18N = {
     negation: "否定"
   },
   fr: {
-    title: "Moteur de relations",
+    title: "Plato System Moteur de relations",
     nodePlaceholder: "Concept (un mot)",
     addNode: "Ajouter un nœud",
     addEdge: "Ajouter une relation",
@@ -137,7 +137,7 @@ const I18N = {
     negation: "Négation"
   },
   de: {
-    title: "Beziehungs-Engine",
+    title: "Plato System Beziehungs-Engine",
     nodePlaceholder: "Begriff (ein Wort)",
     addNode: "Knoten hinzufügen",
     addEdge: "Beziehung hinzufügen",
@@ -148,7 +148,7 @@ const I18N = {
     negation: "Negation"
   },
   pt: {
-    title: "Motor de Relações",
+    title: "Plato System Motor de Relações",
     nodePlaceholder: "Conceito (uma palavra)",
     addNode: "Adicionar nó",
     addEdge: "Adicionar relação",
@@ -159,7 +159,7 @@ const I18N = {
     negation: "Negação"
   },
   ko: {
-    title: "관계 엔진",
+    title: "Plato System 관계 엔진",
     nodePlaceholder: "개념 (한 단어)",
     addNode: "노드 추가",
     addEdge: "관계 추가",
