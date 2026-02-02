@@ -1,0 +1,36 @@
+{
+  "nodes": [
+    {
+      "id": "n1",
+      "label": "愛"
+    },
+    {
+      "id": "n2",
+      "label": "金"
+    },
+    {
+      "id": "n3",
+      "label": "自由"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n1",
+      "to": "n1",
+      "type": "causal",
+      "strength": 0.5984771294381963
+    },
+    {
+      "from": "n1",
+      "to": "n2",
+      "type": "causal",
+      "strength": 0.8377147418142156
+    },
+    {
+      "from": "n1",
+      "to": "n3",
+      "type": "contradiction",
+      "strength": 0.5608815319885558
+    }
+  ]
+}
