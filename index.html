@@ -2,35 +2,48 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Relation Engine</title>
   <link rel="stylesheet" href="style.css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 </head>
 <body>
-  <h2>Plato System</h2>
 
-  <div id="controls">
-    <input id="nodeLabel" placeholder="概念（1語）" />
-    <button onclick="addNode()">ノード追加</button>
-  </div>
+<div id="lang-switch">
+  <button onclick="setLang('ja')">日本語</button>
+  <button onclick="setLang('en')">EN</button>
+  <button onclick="setLang('es')">ES</button>
+  <button onclick="setLang('zh-cn')">中文</button>
+  <button onclick="setLang('zh-tw')">繁體</button>
+  <button onclick="setLang('fr')">FR</button>
+  <button onclick="setLang('de')">DE</button>
+  <button onclick="setLang('pt')">PT</button>
+  <button onclick="setLang('ko')">KO</button>
+</div>
 
-  <div id="relation">
-    <select id="from"></select>
-    <select id="to"></select>
-    <select id="type">
-      <option value="causal">因果</option>
-      <option value="contradiction">矛盾</option>
-      <option value="containment">包含</option>
-      <option value="analogy">類比</option>
-      <option value="negation">否定</option>
-    </select>
-    <button onclick="addEdge()">関係追加</button>
-  </div>
+<h2 data-i18n="title">Relation Engine</h2>
 
-  <pre id="output"></pre>
+<div id="controls">
+  <input id="nodeLabel"
+         data-i18n-placeholder="nodePlaceholder"
+         placeholder="概念（1語）" />
+  <button onclick="addNode()" data-i18n="addNode">ノード追加</button>
+</div>
 
-  <script src="app.js"></script>
+<div id="relation">
+  <select id="from"></select>
+  <select id="to"></select>
+  <select id="type">
+    <option value="causal" data-i18n="causal">因果</option>
+    <option value="contradiction" data-i18n="contradiction">矛盾</option>
+    <option value="containment" data-i18n="containment">包含</option>
+    <option value="analogy" data-i18n="analogy">類比</option>
+    <option value="negation" data-i18n="negation">否定</option>
+  </select>
+  <button onclick="addEdge()" data-i18n="addEdge">関係追加</button>
+</div>
+
+<pre id="output"></pre>
+
+<script src="app.js"></script>
 </body>
 </html>
-
-
