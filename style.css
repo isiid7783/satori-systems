@@ -1,67 +1,116 @@
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
-
-body {
-  font-family: monospace;
-  background: #111;
-  color: #ddd;
-  padding: 12px;
+* {
   box-sizing: border-box;
 }
 
-#lang-switch {
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #1a1a1a, #000);
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", monospace;
+  color: #eaeaea;
+}
+
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+header {
+  margin-bottom: 40px;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.subtitle {
+  font-size: 14px;
+  opacity: 0.6;
+  margin-top: 4px;
+}
+
+.glass {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(14px);
+  padding: 24px;
+}
+
+.inputs {
   display: flex;
+  gap: 12px;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 12px;
 }
 
-#lang-switch button {
-  font-size: 13px;
-  background: #222;
-  color: #ddd;
-  border: 1px solid #444;
-  padding: 6px 8px;
-}
-
-input, select, button {
-  background: #222;
-  color: #ddd;
-  border: 1px solid #444;
-  padding: 8px;
-  font-size: 16px;
-}
-
-pre {
-  margin-top: 12px;
+input {
+  flex: 1;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
   padding: 12px;
-  background: #000;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.edge {
-  margin: 6px 0;
-  padding-left: 8px;
+  color: #fff;
   font-size: 14px;
 }
 
-.edge-reversible {
-  border-left: 2px solid #aaa; /* 細線 */
-  color: #aaa;
+input::placeholder {
+  color: rgba(255,255,255,0.4);
 }
 
-.edge-irreversible {
-  border-left: 6px solid #ff4444; /* 太線 */
-  color: #ff4444;
-  font-weight: bold;
+button {
+  background: #fff;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.edge-unknown {
-  border-left: 2px dashed #777; /* 点線 */
-  color: #777;
+button:hover {
+  opacity: 0.9;
 }
+
+.result {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.metric span {
+  display: block;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.metric strong {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.bar-container {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 6px;
+  margin-top: 18px;
+  overflow: hidden;
+}
+
+#bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ffffff, #9effff);
+  transition: width 0.4s ease;
+}
+
+footer {
+  margin-top: 32px;
+  font-size: 11px;
+  opacity: 0.4;
+  text-align: center;
+}
+
