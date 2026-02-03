@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plato design — Semantic Distance</title>
+  <title>Plato design — Semantic Network</title>
 
-  <!-- TensorFlow.js -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder"></script>
 
@@ -17,43 +16,31 @@
 
   <header>
     <div class="logo">Plato design</div>
-    <div class="subtitle">Interconnected language space</div>
+    <div class="subtitle">Semantic distance network</div>
   </header>
 
   <section class="panel glass">
-    <div class="inputs">
-      <input id="wordA" placeholder="Word or phrase A" />
-      <input id="wordB" placeholder="Word or phrase B" />
-      <button onclick="compare()">Measure distance</button>
-    </div>
+    <textarea id="words" placeholder="Enter words or phrases (one per line)"></textarea>
+    <button onclick="buildNetwork()">Build network</button>
+  </section>
 
-    <div class="result">
-      <div class="metric">
-        <span>Similarity</span>
-        <strong id="similarity">–</strong>
-      </div>
-      <div class="metric">
-        <span>Distance</span>
-        <strong id="distance">–</strong>
-      </div>
-    </div>
+  <section class="panel glass">
+    <h3>Network</h3>
+    <div id="network"></div>
+  </section>
 
-    <div class="bar-container">
-      <div id="bar"></div>
-    </div>
+  <section class="panel glass">
+    <h3>History</h3>
+    <div id="history"></div>
   </section>
 
   <footer>
-    Language meaning distance is computed from usage distribution, not definition.
+    Distances are computed from language usage distribution.
   </footer>
 
 </div>
 
 <script src="app.js"></script>
+<script src="api.js"></script>
 </body>
 </html>
-
-
-
-
-
